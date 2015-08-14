@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author yizhuan
  *
  */
-public class NewReaderRegisteredEvent implements Serializable{
+public class NewReaderRegisteredEvent implements LibraryEvent{
 
 	private String id;
 	

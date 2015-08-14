@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author yizhuan
  *
  */
-public class MarkBookHotEvent implements Serializable{
+public class MarkBookHotEvent implements LibraryEvent{
 
 	private final String id;
 

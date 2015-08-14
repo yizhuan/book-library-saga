@@ -6,7 +6,7 @@ package mobi.qubits.ex.library.domain.events;
  * @author yizhuan
  *
  */
-public class BorrowEvent implements BookEvent{
+public class BorrowEvent implements LibraryEvent{
 
 	private final String borrowerId;//reader
 	
