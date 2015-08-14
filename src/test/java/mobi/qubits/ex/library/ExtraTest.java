@@ -9,8 +9,10 @@ import mobi.qubits.ex.library.domain.commands.BorrowCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewBookCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewReaderCommand;
 import mobi.qubits.ex.library.domain.commands.ReturnCommand;
+import mobi.qubits.ex.library.domain.reader.Reader;
 import mobi.qubits.ex.library.query.BookEntry;
 import mobi.qubits.ex.library.query.BookEntryRepository;
+import mobi.qubits.ex.library.query.ReaderEntry;
 import mobi.qubits.ex.library.query.ReaderEntryRepository;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -71,4 +73,30 @@ public class ExtraTest {
 		
 		//TODO: clean-up needed
 	}	
+	
+	@Test 
+	public void testBorrow2Books() throws Exception{
+		
+		String reader1 = identifierFactory.generateIdentifier();
+		cmdGateway.send(new RegisterNewReaderCommand(reader1, "John"));
+		
+		String book1 = identifierFactory.generateIdentifier();
+		cmdGateway.send(new RegisterNewBookCommand(book1, "Game of Thrones", "George R. R. Martin"));
+		
+		String book2 = identifierFactory.generateIdentifier();
+		cmdGateway.send(new RegisterNewBookCommand(book2, "The Importance of Living", "Lin Yutang"));
+
+		bookCommandGateway.sendAndWait( new BorrowCommand(reader1, book1), 3000, TimeUnit.MILLISECONDS );		
+		bookCommandGateway.sendAndWait( new BorrowCommand(reader1, book2), 3000, TimeUnit.MILLISECONDS );		
+
+		Thread.sleep(2000);
+		
+		BookEntry book_1 = bookEntryRepository.findOne(book1);
+		assertTrue(book_1.getBorrowerId().equals(reader1) );
+		
+		ReaderEntry reader_1 = readerEntryRepository.findOne(reader1);
+		assertTrue(reader_1.getBorrowedBookIds().size()==2);
+		
+		//TODO: clean-up needed
+	}		
 }
