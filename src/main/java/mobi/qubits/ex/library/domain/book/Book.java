@@ -22,9 +22,6 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 	@AggregateIdentifier
 	private String id;
 
-	private String title;
-	private String author;
-
 	private Boolean isHot = false;
 
 	Book() {
@@ -44,9 +41,7 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 	
 	@EventSourcingHandler
 	void on(NewBookRegisteredEvent event) {
-		this.id = event.getBorrowerId();
-		this.title = event.getTitle();
-		this.author = event.getAuthor();
+		this.id = event.getId();
 	}
 
 	@EventSourcingHandler

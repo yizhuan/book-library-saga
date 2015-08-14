@@ -23,7 +23,7 @@ public class NewBookRegisteredEvent implements LibraryEvent{
 	}
 
 
-	public String getBorrowerId() {
+	public String getId() {
 		return id;
 	}
 

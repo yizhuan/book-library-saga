@@ -29,8 +29,6 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 	@AggregateIdentifier
 	private String id;
 
-	private String name;
-	
 	private int booksBorrowed = 0;
 	
 	private List<String> borrowedBookIds = new ArrayList<String>();
@@ -68,7 +66,6 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 	@EventSourcingHandler
 	void on(NewReaderRegisteredEvent event) {
 		this.id = event.getId();
-		this.name = event.getName();
 	}	
 	
 	

@@ -24,7 +24,7 @@ public class BookEventListener {
 	@EventHandler
 	void on(NewBookRegisteredEvent event) {
 		BookEntry book = new BookEntry();
-		book.setId(event.getBorrowerId());
+		book.setId(event.getId());
 		book.setTitle(event.getTitle());
 		book.setAuthor(event.getAuthor());
 		book.setBorrowerId(null);

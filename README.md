@@ -1,12 +1,10 @@
 # book-library-saga
 
-This is a simple library management program using Domain Driven Design.
- 
-Each reader can borrow up to 3 books and one book can only be borrowed by one reader a time.
+This is an exercise of Domain Driven Design and Spring Boot techniques. 
 
-http://cqrs.nu/Faq/aggregates suggests if I need to update two aggregates in one transaction,  the aggregate boundaries are not well-defined.
-What is the solution for this library management scenario? 
-(https://www.youtube.com/watch?v=oFPbEi2463c&list=PLzsUBUx6tYGDmQEoi8i86eUar7moANEDS)
+The program manages books and readers of a library. Each reader can borrow up to three books, and one book can only be borrowed by one reader a time. When a book has been borrowed five times, it is marked as a 'hot' book. The admin can register new books and new readers. The admin can check who is holding a book and what books a reader has currently borrowed.
+
+There are two domain models: Book and Reader.
 
 This application uses:
 
@@ -80,5 +78,8 @@ This version is just a rough sketch. Still lots to do.
 
 # Reference
 
+What is an aggregate?
 http://cqrs.nu/Faq/aggregates
 
+How You Can Implement Aggregates and Domain Entities Effectively in Domain Models
+https://www.youtube.com/watch?v=oFPbEi2463c&list=PLzsUBUx6tYGDmQEoi8i86eUar7moANEDS
