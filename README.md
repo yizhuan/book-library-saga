@@ -4,10 +4,6 @@ This is a simple library management program using Domain Driven Design.
  
 Each reader can borrow up to 3 books and one book can only be borrowed by one reader a time.
 
-There are 2 aggregates in the domain model: Reader and Book. When a reader borrows a book, it needs to update to both Reader and Book.
-When BorrowCommand is received, Reader raises an BorrowEvent. A Saga is used to send a LendCommand to Book to update the book. 
-If the book is taken, a RejectCommand is sent to Reader to rollback the Reader updates.
- 
 http://cqrs.nu/Faq/aggregates suggests if I need to update two aggregates in one transaction,  the aggregate boundaries are not well-defined.
 What is the solution for this library management scenario? 
 (https://www.youtube.com/watch?v=oFPbEi2463c&list=PLzsUBUx6tYGDmQEoi8i86eUar7moANEDS)
