@@ -1,11 +1,12 @@
 package mobi.qubits.ex.library;
 
+import mobi.qubits.ex.library.domain.book.Book;
 import mobi.qubits.ex.library.domain.commands.BorrowCommand;
+import mobi.qubits.ex.library.domain.commands.MarkBookHotCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewReaderCommand;
-import mobi.qubits.ex.library.domain.commands.RejectCommand;
 import mobi.qubits.ex.library.domain.commands.ReturnCommand;
 import mobi.qubits.ex.library.domain.events.BorrowEvent;
-import mobi.qubits.ex.library.domain.events.BorrowingRejectedEvent;
+import mobi.qubits.ex.library.domain.events.MarkBookHotEvent;
 import mobi.qubits.ex.library.domain.events.NewBookRegisteredEvent;
 import mobi.qubits.ex.library.domain.events.NewReaderRegisteredEvent;
 import mobi.qubits.ex.library.domain.events.ReturnEvent;
@@ -48,22 +49,7 @@ public class ReaderTest {
 				new NewReaderRegisteredEvent("1", "John"))						
 				.when(new BorrowCommand("1", "1"))
 				.expectEvents(new BorrowEvent("1", "1"));
-	}
-	
-	
-	@Test
-	public void testBookIsTaken() {
-	
-		fixture.given(
-				new NewBookRegisteredEvent("1", "Book100", "Albert"),
-				new NewReaderRegisteredEvent("1", "John"),
-				new NewReaderRegisteredEvent("2", "Mark"),
-				new BorrowCommand("1", "1")
-				)				
-				.when(new RejectCommand("2", "1"))
-				.expectEvents(new BorrowingRejectedEvent("2", "1"));		
-	}
-			
+	}		
 	
 	@Test
 	public void testReturnBook() {
@@ -77,7 +63,5 @@ public class ReaderTest {
 				.expectEvents(new ReturnEvent("1", "1"));
 
 	}
-		
-	
-
+				
 }

@@ -7,10 +7,8 @@ import mobi.qubits.ex.library.domain.BorrowingSameBookException;
 import mobi.qubits.ex.library.domain.MaxAllowanceExceededException;
 import mobi.qubits.ex.library.domain.commands.BorrowCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewReaderCommand;
-import mobi.qubits.ex.library.domain.commands.RejectCommand;
 import mobi.qubits.ex.library.domain.commands.ReturnCommand;
 import mobi.qubits.ex.library.domain.events.BorrowEvent;
-import mobi.qubits.ex.library.domain.events.BorrowingRejectedEvent;
 import mobi.qubits.ex.library.domain.events.NewReaderRegisteredEvent;
 import mobi.qubits.ex.library.domain.events.ReturnEvent;
 
@@ -60,12 +58,7 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 		
 		apply(new BorrowEvent(cmd.getBorrowerId(), cmd.getBookId()));
 	}
-	
-	@CommandHandler
-	public void on(RejectCommand cmd){
-		apply(new BorrowingRejectedEvent(cmd.getBorrowerId(), cmd.getBookId()));
-	}		
-	
+		
 	
 	@CommandHandler
 	public void on(ReturnCommand cmd){
@@ -83,18 +76,12 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 	void on(BorrowEvent event) {
 		booksBorrowed++;
 		borrowedBookIds.add(event.getBookId());
-	}
-	
-	@EventSourcingHandler
-	void on(BorrowingRejectedEvent event) {
-		booksBorrowed--;
-		borrowedBookIds.add(event.getBookId());
 	}	
-
 
 	@EventSourcingHandler
 	void on(ReturnEvent event) {
 		booksBorrowed--;
+		borrowedBookIds.remove(event.getBookId());
 	}
 	
 	private boolean hasBook(String bookId){

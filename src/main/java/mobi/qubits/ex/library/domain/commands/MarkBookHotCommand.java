@@ -7,7 +7,7 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
  * @author yizhuan
  *
  */
-public class MarkBookHotCommand implements BookCommand{
+public class MarkBookHotCommand implements LibraryCommand{
 
 	@TargetAggregateIdentifier
 	private String id;

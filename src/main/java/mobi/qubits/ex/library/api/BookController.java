@@ -4,11 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import mobi.qubits.ex.library.api.requests.BookRequest;
 import mobi.qubits.ex.library.api.requests.RegisterBookRequest;
-import mobi.qubits.ex.library.domain.commands.BorrowCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewBookCommand;
-import mobi.qubits.ex.library.domain.commands.ReturnCommand;
 import mobi.qubits.ex.library.query.BookEntry;
 import mobi.qubits.ex.library.query.BookEntryRepository;
 import mobi.qubits.ex.library.query.ReaderEntryRepository;

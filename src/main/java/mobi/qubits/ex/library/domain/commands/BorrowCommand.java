@@ -8,7 +8,7 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
  * @author yizhuan
  *
  */
-public class BorrowCommand implements BookCommand{
+public class BorrowCommand implements LibraryCommand{
 
 	@TargetAggregateIdentifier
 	private String borrowerId;
@@ -20,10 +20,6 @@ public class BorrowCommand implements BookCommand{
 		this.bookId = bookId;
 	
 		this.borrowerId = borrowerId;
-	}
-
-	public String getId() {
-		return borrowerId;
 	}
 	
 	public String getBookId() {

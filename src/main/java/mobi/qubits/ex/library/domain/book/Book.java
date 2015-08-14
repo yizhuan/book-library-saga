@@ -1,12 +1,7 @@
 package mobi.qubits.ex.library.domain.book;
 
-import mobi.qubits.ex.library.domain.BookAlreadyTakenException;
-import mobi.qubits.ex.library.domain.BorrowingSameBookException;
-import mobi.qubits.ex.library.domain.MaxAllowanceExceededException;
-import mobi.qubits.ex.library.domain.commands.LendCommand;
 import mobi.qubits.ex.library.domain.commands.MarkBookHotCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewBookCommand;
-import mobi.qubits.ex.library.domain.events.LendEvent;
 import mobi.qubits.ex.library.domain.events.MarkBookHotEvent;
 import mobi.qubits.ex.library.domain.events.NewBookRegisteredEvent;
 
@@ -30,12 +25,7 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 	private String title;
 	private String author;
 
-	private Boolean isAvailable = true;
-
 	private Boolean isHot = false;
-
-	//no need
-	private int popularityCount = 0;
 
 	Book() {
 
@@ -45,19 +35,6 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 	public Book(RegisterNewBookCommand cmd) {
 		apply(new NewBookRegisteredEvent(cmd.getId(), cmd.getTitle(),
 				cmd.getAuthor()));
-	}	
-	
-	@CommandHandler
-	void on(LendCommand cmd) throws BookAlreadyTakenException,
-			BorrowingSameBookException, MaxAllowanceExceededException{
-		
-		if (this.isAvailable ){
-			apply(new LendEvent(cmd.getBorrowerId(), cmd.getBookId()));			
-		}
-		else{
-			//apply(new BookNotAvailableEvent(cmd.getBookId()));
-			throw new BookAlreadyTakenException();
-		}		
 	}			
 		
 	@CommandHandler
@@ -70,8 +47,6 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 		this.id = event.getBorrowerId();
 		this.title = event.getTitle();
 		this.author = event.getAuthor();
-		this.isAvailable = true;
-		this.popularityCount = 0;
 	}
 
 	@EventSourcingHandler
@@ -79,16 +54,4 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 		this.isHot = true;
 	}		
 	
-	@EventSourcingHandler
-	void on(LendEvent event) {
-		this.isAvailable = false;
-		this.popularityCount++;
-	}
-	
-	/*
-	@EventSourcingHandler
-	void on(BookNotAvailableEvent event) {
-		//what can I do with this event?
-	}
-	*/
 }
