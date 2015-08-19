@@ -15,53 +15,31 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ReaderEventListener {
-	@Autowired
-	private BookEntryRepository bookEntryRepository;
 
 	@Autowired
 	private ReaderEntryRepository readerRepository;
 
 	@EventHandler
-	void on(NewReaderRegisteredEvent event) {
-		
+	void on(NewReaderRegisteredEvent event) {		
 		ReaderEntry reader = new ReaderEntry();
 		reader.setId(event.getId());
 		reader.setName(event.getName());
 		readerRepository.save(reader);
-	}
-	
+	}		
 	
 	@EventHandler
 	void on(BorrowEvent event) {
-
-		BookEntry book = bookEntryRepository.findOne(event.getBookId());
-		
-		ReaderEntry reader = readerRepository.findOne(event.getBorrowerId());
-		
-		book.setBorrowerId(reader.getId());
-		book.setBorrowed(true);		
-		bookEntryRepository.save(book);
-				
-		reader.addBorrowedBook(book.getId());		
+		ReaderEntry reader = readerRepository.findOne(event.getBorrowerId());		
+		reader.addBorrowedBook(event.getBorrowerId());		
 		readerRepository.save(reader);
 	}
 	
 	
 	@EventHandler
-	void on(ReturnEvent event) {
-		
-		BookEntry book = bookEntryRepository.findOne(event.getBookId());
-		
-		ReaderEntry reader = readerRepository.findOne(book.getBorrowerId());
-		if (reader!=null){
-			reader.removeBorrowedBook(book.getId());		
-			readerRepository.save(reader);
-		}
-		
-		book.setBorrowed(false);
-		book.setBorrowerId(null);				
-		bookEntryRepository.save(book);
-				
+	void on(ReturnEvent event) {		
+		ReaderEntry reader = readerRepository.findOne(event.getBorrowerId());
+		reader.removeBorrowedBook(event.getBookId());		
+		readerRepository.save(reader);		
 	}
 	
 

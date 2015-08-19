@@ -6,9 +6,13 @@ import java.util.List;
 import mobi.qubits.ex.library.domain.BorrowingSameBookException;
 import mobi.qubits.ex.library.domain.MaxAllowanceExceededException;
 import mobi.qubits.ex.library.domain.commands.BorrowCommand;
+import mobi.qubits.ex.library.domain.commands.CancelReservationCommand;
+import mobi.qubits.ex.library.domain.commands.MakeReservationCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewReaderCommand;
 import mobi.qubits.ex.library.domain.commands.ReturnCommand;
 import mobi.qubits.ex.library.domain.events.BorrowEvent;
+import mobi.qubits.ex.library.domain.events.CancelReservationEvent;
+import mobi.qubits.ex.library.domain.events.MakeReservationEvent;
 import mobi.qubits.ex.library.domain.events.NewReaderRegisteredEvent;
 import mobi.qubits.ex.library.domain.events.ReturnEvent;
 
@@ -39,6 +43,7 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 	public Reader(RegisterNewReaderCommand cmd) {
 		apply(new NewReaderRegisteredEvent(cmd.getId(),cmd.getName()));
 	}	
+		
 	
 	@CommandHandler
 	public void on(BorrowCommand cmd) 
@@ -65,8 +70,7 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 	void on(NewReaderRegisteredEvent event) {
 		this.id = event.getId();
 	}	
-	
-	
+		
 	@EventSourcingHandler
 	void on(BorrowEvent event) {
 		borrowedBookIds.add(event.getBookId());

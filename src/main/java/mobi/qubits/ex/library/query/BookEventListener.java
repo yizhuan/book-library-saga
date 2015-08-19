@@ -1,7 +1,11 @@
 package mobi.qubits.ex.library.query;
 
+import mobi.qubits.ex.library.domain.events.BorrowEvent;
+import mobi.qubits.ex.library.domain.events.CancelReservationEvent;
+import mobi.qubits.ex.library.domain.events.MakeReservationEvent;
 import mobi.qubits.ex.library.domain.events.MarkBookHotEvent;
 import mobi.qubits.ex.library.domain.events.NewBookRegisteredEvent;
+import mobi.qubits.ex.library.domain.events.ReturnEvent;
 
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +22,6 @@ public class BookEventListener {
 	@Autowired
 	private BookEntryRepository bookEntryRepository;
 
-	@Autowired
-	private ReaderEntryRepository readerRepository;
-
 	@EventHandler
 	void on(NewBookRegisteredEvent event) {
 		BookEntry book = new BookEntry();
@@ -32,10 +33,51 @@ public class BookEventListener {
 	}
 	
 	@EventHandler
+	void on(BorrowEvent event) {
+
+		BookEntry book = bookEntryRepository.findOne(event.getBookId());
+				
+		book.setBorrowerId(event.getBorrowerId());
+		book.setBorrowed(true);	
+
+		book.setReservedByBorrowerId(null);
+		
+		bookEntryRepository.save(book);
+				
+	}
+	
+	
+	@EventHandler
+	void on(ReturnEvent event) {
+		
+		BookEntry book = bookEntryRepository.findOne(event.getBookId());
+		
+		book.setBorrowed(false);
+		book.setBorrowerId(null);
+		
+		bookEntryRepository.save(book);
+				
+	}	
+	
+	@EventHandler
 	void on(MarkBookHotEvent event) {
 		BookEntry book = bookEntryRepository.findOne(event.getId());
 		book.setIsHot(true);
 		bookEntryRepository.save(book);
-	}	
+	}
+	
+	@EventHandler
+	void on(MakeReservationEvent event) {
+		BookEntry book = bookEntryRepository.findOne(event.getBookId());
+		book.setReservedByBorrowerId(event.getBorrowerId());
+		bookEntryRepository.save(book);
+	}
 
+	@EventHandler
+	void on(CancelReservationEvent event) {
+		BookEntry book = bookEntryRepository.findOne(event.getBookId());
+		book.setReservedByBorrowerId(null);
+		bookEntryRepository.save(book);
+	}
+	
 }

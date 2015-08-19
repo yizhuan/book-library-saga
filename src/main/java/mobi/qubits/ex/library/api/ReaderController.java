@@ -12,6 +12,7 @@ import mobi.qubits.ex.library.domain.BorrowingSameBookException;
 import mobi.qubits.ex.library.domain.MaxAllowanceExceededException;
 import mobi.qubits.ex.library.domain.commands.BorrowCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewReaderCommand;
+import mobi.qubits.ex.library.domain.commands.MakeReservationCommand;
 import mobi.qubits.ex.library.domain.commands.ReturnCommand;
 import mobi.qubits.ex.library.query.BookEntry;
 import mobi.qubits.ex.library.query.BookEntryRepository;
@@ -82,6 +83,53 @@ public class ReaderController {
 	public @ResponseBody ReaderEntry findReader(@PathVariable String id) {
 		return readerEntryRepository.findOne(id);
 	}	
+
+	
+	@RequestMapping(value = "/api/readers/{id}/makeReservation", method = RequestMethod.POST)
+	public ResponseEntity<?> makeReservation(@RequestBody @Valid BookRequest req, @PathVariable String id) {
+		
+		BookEntry book = bookEntryRepository.findOne(req.getBookId());
+		if (book==null){
+			return errorResponse("Book not found.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}
+
+		String reservedByBorrowerId = book.getReservedByBorrowerId();
+		
+		if (reservedByBorrowerId==null){
+			cmdGateway.sendAndWait(new MakeReservationCommand(id, req.getBookId()), 3000, TimeUnit.MILLISECONDS);
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+		
+		if (id.equals(reservedByBorrowerId)){
+			return errorResponse("You've already reserved the book.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}
+		else{
+			return errorResponse("This book has been reserved by another reader.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}		
+	}
+	
+	@RequestMapping(value = "/api/readers/{id}/cancelReservation", method = RequestMethod.POST)
+	public ResponseEntity<?> cancelReservation(@RequestBody @Valid BookRequest req, @PathVariable String id) {
+		BookEntry book = bookEntryRepository.findOne(req.getBookId());
+		if (book==null){
+			return errorResponse("Book not found.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}
+
+		String reservedByBorrowerId = book.getReservedByBorrowerId();
+		
+		if (reservedByBorrowerId==null){
+			return errorResponse("You didn't reserve this book.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}
+		else{
+			if (id.equals(reservedByBorrowerId)){
+				cmdGateway.sendAndWait(new MakeReservationCommand(id, req.getBookId()), 3000, TimeUnit.MILLISECONDS);
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);					
+			}
+			else{
+				return errorResponse("This book has been reserved by another reader.",req.getBookId(), HttpStatus.BAD_REQUEST);
+			}					
+		}		
+	}	
 	
 	
 	@RequestMapping(value = "/api/readers/{id}/borrow", method = RequestMethod.POST)
@@ -91,6 +139,16 @@ public class ReaderController {
 		if (book==null){
 			return errorResponse("Book not found.",req.getBookId(), HttpStatus.BAD_REQUEST);
 		}
+		
+		String reservedByBorrowerId = book.getReservedByBorrowerId();
+		
+		if (reservedByBorrowerId==null){
+			return errorResponse("You need to reserve the book first.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}
+		
+		if (!id.equals(reservedByBorrowerId)){		
+			return errorResponse("This book has been reserved by another reader.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}			
 		
 		if (book.isBorrowed()){
 			return errorResponse("This book is not available. It has been taken by another reader.", 
