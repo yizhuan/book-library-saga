@@ -88,6 +88,10 @@ public class ReaderController {
 	public ResponseEntity<?> borrowBook(@RequestBody @Valid BookRequest req, @PathVariable String id) {
 		
 		BookEntry book = bookEntryRepository.findOne(req.getBookId());
+		if (book==null){
+			return errorResponse("Book not found.",req.getBookId(), HttpStatus.BAD_REQUEST);
+		}
+		
 		if (book.isBorrowed()){
 			return errorResponse("This book is not available. It has been taken by another reader.", 
 					req.getBookId(), HttpStatus.BAD_REQUEST);

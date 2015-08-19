@@ -14,6 +14,7 @@ This application uses:
 - Spring Boot
 - Axon Framework
 - RESTful service
+- MongoDB
 
 # Build
 

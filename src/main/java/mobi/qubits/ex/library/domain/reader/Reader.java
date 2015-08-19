@@ -28,8 +28,6 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 
 	@AggregateIdentifier
 	private String id;
-
-	private int booksBorrowed = 0;
 	
 	private List<String> borrowedBookIds = new ArrayList<String>();
 
@@ -50,7 +48,7 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 			throw new BorrowingSameBookException();
 		}		
 		
-		if (booksBorrowed>=3){			
+		if (borrowedBookIds.size()>=3){			
 			 throw new MaxAllowanceExceededException();
 		}
 		
@@ -71,13 +69,11 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 	
 	@EventSourcingHandler
 	void on(BorrowEvent event) {
-		booksBorrowed++;
 		borrowedBookIds.add(event.getBookId());
 	}	
 
 	@EventSourcingHandler
 	void on(ReturnEvent event) {
-		booksBorrowed--;
 		borrowedBookIds.remove(event.getBookId());
 	}
 	
