@@ -9,10 +9,10 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
  *
  */
 public class BorrowCommand implements LibraryCommand{
-
-	@TargetAggregateIdentifier
+	
 	private String borrowerId;
 	
+	@TargetAggregateIdentifier
 	private String bookId;
 	
 	public BorrowCommand(String borrowerId, String bookId) {

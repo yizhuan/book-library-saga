@@ -7,11 +7,12 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
  * @author yizhuan
  *
  */
-public class ReturnCommand {
+public class ReturnCommand implements LibraryCommand{
 
-	@TargetAggregateIdentifier
+	
 	private String borrowerId;
 	
+	@TargetAggregateIdentifier
 	private String bookId;
 
 	public ReturnCommand(String borrowerId, String bookId) {

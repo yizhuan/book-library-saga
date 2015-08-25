@@ -8,15 +8,14 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
  * @author yizhuan
  *
  */
-public class MakeReservationCommand implements LibraryCommand{
+public class ReaderBorrowCommand implements LibraryCommand{
 
-	
-	private String borrowerId;
-	
 	@TargetAggregateIdentifier
+	private String borrowerId;
+		
 	private String bookId;
 	
-	public MakeReservationCommand(String borrowerId, String bookId) {
+	public ReaderBorrowCommand(String borrowerId, String bookId) {
 		super();
 		this.bookId = bookId;
 	

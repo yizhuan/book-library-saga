@@ -6,13 +6,13 @@ package mobi.qubits.ex.library.domain.events;
  * @author yizhuan
  *
  */
-public class CancelReservationEvent implements LibraryEvent{
+public class ReaderReturnEvent implements LibraryEvent{
 
 	private final String borrowerId;//reader
 	
 	private String bookId;
 
-	public CancelReservationEvent(String borrowerId,  String bookId) {
+	public ReaderReturnEvent(String borrowerId,  String bookId) {
 		super();
 		this.borrowerId = borrowerId;
 		

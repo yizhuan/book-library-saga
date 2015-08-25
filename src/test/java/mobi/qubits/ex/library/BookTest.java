@@ -1,6 +1,6 @@
 package mobi.qubits.ex.library;
 
-import mobi.qubits.ex.library.domain.book.Book;
+import mobi.qubits.ex.library.domain.Book;
 import mobi.qubits.ex.library.domain.commands.MarkBookHotCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewBookCommand;
 import mobi.qubits.ex.library.domain.events.MarkBookHotEvent;

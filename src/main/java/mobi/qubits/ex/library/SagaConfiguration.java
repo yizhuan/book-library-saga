@@ -1,6 +1,8 @@
 package mobi.qubits.ex.library;
 
-import mobi.qubits.ex.library.domain.BookReaderSaga;
+import mobi.qubits.ex.library.domain.BorrowSaga;
+import mobi.qubits.ex.library.domain.HotBookSaga;
+import mobi.qubits.ex.library.domain.ReturnSaga;
 
 import org.axonframework.saga.GenericSagaFactory;
 import org.axonframework.saga.ResourceInjector;
@@ -52,9 +54,9 @@ public class SagaConfiguration {
 	@Bean
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public SagaManager sagaManager() {
-		AsyncAnnotatedSagaManager mgr =	new AsyncAnnotatedSagaManager(axonconf.eventBus(), BookReaderSaga.class);
+		AsyncAnnotatedSagaManager mgr =	new AsyncAnnotatedSagaManager(axonconf.eventBus(), HotBookSaga.class, BorrowSaga.class, ReturnSaga.class);
 		/*
-		 	AsyncAnnotatedSagaManager mgr =	new AsyncAnnotatedSagaManager(BookAdminSaga.class);
+		 	AsyncAnnotatedSagaManager mgr =	new AsyncAnnotatedSagaManager(HotBookSaga.class);
 			axonConfig.eventBus().subscribe(mgr);
 		 */
 		mgr.setSagaFactory(sagaFactory());

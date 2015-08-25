@@ -1,6 +1,6 @@
 package mobi.qubits.ex.library;
 
-import mobi.qubits.ex.library.domain.reader.Reader;
+import mobi.qubits.ex.library.domain.Reader;
 
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
 import org.axonframework.eventsourcing.EventSourcingRepository;

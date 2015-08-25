@@ -1,8 +1,8 @@
 package mobi.qubits.ex.library.query;
 
-import mobi.qubits.ex.library.domain.events.BorrowEvent;
 import mobi.qubits.ex.library.domain.events.NewReaderRegisteredEvent;
-import mobi.qubits.ex.library.domain.events.ReturnEvent;
+import mobi.qubits.ex.library.domain.events.ReaderBorrowEvent;
+import mobi.qubits.ex.library.domain.events.ReaderReturnEvent;
 
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ReaderEventListener {
 	}		
 	
 	@EventHandler
-	void on(BorrowEvent event) {
+	void on(ReaderBorrowEvent event) {
 		ReaderEntry reader = readerRepository.findOne(event.getBorrowerId());		
 		reader.addBorrowedBook(event.getBorrowerId());		
 		readerRepository.save(reader);
@@ -36,7 +36,7 @@ public class ReaderEventListener {
 	
 	
 	@EventHandler
-	void on(ReturnEvent event) {		
+	void on(ReaderReturnEvent event) {		
 		ReaderEntry reader = readerRepository.findOne(event.getBorrowerId());
 		reader.removeBorrowedBook(event.getBookId());		
 		readerRepository.save(reader);		

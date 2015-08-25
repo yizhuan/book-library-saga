@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author yizhuan
  *
  */
-public class BookReaderSaga extends AbstractAnnotatedSaga {
+public class HotBookSaga extends AbstractAnnotatedSaga {
 
 	private static final long serialVersionUID = -5929174026616232734L;
 

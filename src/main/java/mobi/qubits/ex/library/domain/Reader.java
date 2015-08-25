@@ -1,19 +1,15 @@
-package mobi.qubits.ex.library.domain.reader;
+package mobi.qubits.ex.library.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mobi.qubits.ex.library.domain.BorrowingSameBookException;
-import mobi.qubits.ex.library.domain.MaxAllowanceExceededException;
-import mobi.qubits.ex.library.domain.commands.BorrowCommand;
-import mobi.qubits.ex.library.domain.commands.CancelReservationCommand;
-import mobi.qubits.ex.library.domain.commands.MakeReservationCommand;
+import mobi.qubits.ex.library.domain.commands.ReaderBorrowCommand;
+import mobi.qubits.ex.library.domain.commands.ReaderReturnCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewReaderCommand;
-import mobi.qubits.ex.library.domain.commands.ReturnCommand;
 import mobi.qubits.ex.library.domain.events.BorrowEvent;
-import mobi.qubits.ex.library.domain.events.CancelReservationEvent;
-import mobi.qubits.ex.library.domain.events.MakeReservationEvent;
 import mobi.qubits.ex.library.domain.events.NewReaderRegisteredEvent;
+import mobi.qubits.ex.library.domain.events.ReaderBorrowEvent;
+import mobi.qubits.ex.library.domain.events.ReaderReturnEvent;
 import mobi.qubits.ex.library.domain.events.ReturnEvent;
 
 import org.axonframework.commandhandling.annotation.CommandHandler;
@@ -46,7 +42,7 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 		
 	
 	@CommandHandler
-	public void on(BorrowCommand cmd) 
+	public void on(ReaderBorrowCommand cmd) 
 			throws MaxAllowanceExceededException, BorrowingSameBookException{
 
 		if (hasBook(cmd.getBookId())){			
@@ -57,13 +53,13 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 			 throw new MaxAllowanceExceededException();
 		}
 		
-		apply(new BorrowEvent(cmd.getBorrowerId(), cmd.getBookId()));
+		apply(new ReaderBorrowEvent(cmd.getBorrowerId(), cmd.getBookId()));
 	}
 		
 	
 	@CommandHandler
-	public void on(ReturnCommand cmd){
-		apply(new ReturnEvent(cmd.getBorrowerId(), cmd.getBookId()));
+	public void on(ReaderReturnCommand cmd){
+		apply(new ReaderReturnEvent(cmd.getBorrowerId(), cmd.getBookId()));
 	}	
 		
 	@EventSourcingHandler
@@ -72,12 +68,12 @@ public class Reader extends AbstractAnnotatedAggregateRoot<String> {
 	}	
 		
 	@EventSourcingHandler
-	void on(BorrowEvent event) {
+	void on(ReaderBorrowEvent event) {
 		borrowedBookIds.add(event.getBookId());
 	}	
 
 	@EventSourcingHandler
-	void on(ReturnEvent event) {
+	void on(ReaderReturnEvent event) {
 		borrowedBookIds.remove(event.getBookId());
 	}
 	

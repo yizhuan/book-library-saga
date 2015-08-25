@@ -21,8 +21,6 @@ public class BookEntry {
 	
 	private String borrowerId;
 	
-	private String reservedByBorrowerId;
-
 	public String getId() {
 		return id;
 	}
@@ -70,17 +68,7 @@ public class BookEntry {
 
 	public void setBorrowerId(String readerId) {
 		this.borrowerId = readerId;
-	}
-	
-	
-
-	public String getReservedByBorrowerId() {
-		return reservedByBorrowerId;
-	}
-
-	public void setReservedByBorrowerId(String reservedByBorrowerId) {
-		this.reservedByBorrowerId = reservedByBorrowerId;
-	}
+	}	
 
 	@Override
 	public int hashCode() {

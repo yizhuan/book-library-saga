@@ -1,8 +1,6 @@
 package mobi.qubits.ex.library.query;
 
 import mobi.qubits.ex.library.domain.events.BorrowEvent;
-import mobi.qubits.ex.library.domain.events.CancelReservationEvent;
-import mobi.qubits.ex.library.domain.events.MakeReservationEvent;
 import mobi.qubits.ex.library.domain.events.MarkBookHotEvent;
 import mobi.qubits.ex.library.domain.events.NewBookRegisteredEvent;
 import mobi.qubits.ex.library.domain.events.ReturnEvent;
@@ -40,8 +38,6 @@ public class BookEventListener {
 		book.setBorrowerId(event.getBorrowerId());
 		book.setBorrowed(true);	
 
-		book.setReservedByBorrowerId(null);
-		
 		bookEntryRepository.save(book);
 				
 	}
@@ -66,18 +62,5 @@ public class BookEventListener {
 		bookEntryRepository.save(book);
 	}
 	
-	@EventHandler
-	void on(MakeReservationEvent event) {
-		BookEntry book = bookEntryRepository.findOne(event.getBookId());
-		book.setReservedByBorrowerId(event.getBorrowerId());
-		bookEntryRepository.save(book);
-	}
-
-	@EventHandler
-	void on(CancelReservationEvent event) {
-		BookEntry book = bookEntryRepository.findOne(event.getBookId());
-		book.setReservedByBorrowerId(null);
-		bookEntryRepository.save(book);
-	}
 	
 }

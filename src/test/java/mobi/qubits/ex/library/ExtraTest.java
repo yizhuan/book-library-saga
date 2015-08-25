@@ -6,10 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 import mobi.qubits.ex.library.domain.BookCommandGateway;
 import mobi.qubits.ex.library.domain.commands.BorrowCommand;
+import mobi.qubits.ex.library.domain.commands.ReaderBorrowCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewBookCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewReaderCommand;
 import mobi.qubits.ex.library.domain.commands.ReturnCommand;
-import mobi.qubits.ex.library.domain.reader.Reader;
 import mobi.qubits.ex.library.query.BookEntry;
 import mobi.qubits.ex.library.query.BookEntryRepository;
 import mobi.qubits.ex.library.query.ReaderEntry;
@@ -86,8 +86,8 @@ public class ExtraTest {
 		String book2 = identifierFactory.generateIdentifier();
 		cmdGateway.send(new RegisterNewBookCommand(book2, "The Importance of Living", "Lin Yutang"));
 
-		bookCommandGateway.sendAndWait( new BorrowCommand(reader1, book1), 3000, TimeUnit.MILLISECONDS );		
-		bookCommandGateway.sendAndWait( new BorrowCommand(reader1, book2), 3000, TimeUnit.MILLISECONDS );		
+		bookCommandGateway.sendAndWait( new ReaderBorrowCommand(reader1, book1), 3000, TimeUnit.MILLISECONDS );		
+		bookCommandGateway.sendAndWait( new ReaderBorrowCommand(reader1, book2), 3000, TimeUnit.MILLISECONDS );		
 
 		Thread.sleep(2000);
 		

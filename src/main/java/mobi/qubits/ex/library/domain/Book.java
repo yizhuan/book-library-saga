@@ -1,13 +1,15 @@
-package mobi.qubits.ex.library.domain.book;
+package mobi.qubits.ex.library.domain;
 
-import mobi.qubits.ex.library.domain.commands.CancelReservationCommand;
-import mobi.qubits.ex.library.domain.commands.MakeReservationCommand;
+import mobi.qubits.ex.library.domain.commands.BorrowCommand;
 import mobi.qubits.ex.library.domain.commands.MarkBookHotCommand;
 import mobi.qubits.ex.library.domain.commands.RegisterNewBookCommand;
-import mobi.qubits.ex.library.domain.events.CancelReservationEvent;
-import mobi.qubits.ex.library.domain.events.MakeReservationEvent;
+import mobi.qubits.ex.library.domain.commands.ReturnCommand;
+import mobi.qubits.ex.library.domain.events.BorrowEvent;
 import mobi.qubits.ex.library.domain.events.MarkBookHotEvent;
 import mobi.qubits.ex.library.domain.events.NewBookRegisteredEvent;
+import mobi.qubits.ex.library.domain.events.ReaderBorrowEvent;
+import mobi.qubits.ex.library.domain.events.ReaderReturnEvent;
+import mobi.qubits.ex.library.domain.events.ReturnEvent;
 
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
@@ -39,13 +41,13 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 	}	
 		
 	@CommandHandler
-	public void on(MakeReservationCommand cmd) {
-		apply(new MakeReservationEvent(cmd.getBorrowerId(), cmd.getBookId()));
+	public void on(BorrowCommand cmd) {
+		apply(new BorrowEvent(cmd.getBorrowerId(), cmd.getBookId()));
 	}		
 	
 	@CommandHandler
-	public void on(CancelReservationCommand cmd) {
-		apply(new CancelReservationEvent(cmd.getBorrowerId(), cmd.getBookId()));
+	public void on(ReturnCommand cmd) {
+		apply(new ReturnEvent(cmd.getBorrowerId(), cmd.getBookId()));
 	}			
 	
 	@CommandHandler
@@ -59,12 +61,12 @@ public class Book extends AbstractAnnotatedAggregateRoot<String> {
 	}
 	
 	@EventSourcingHandler
-	void on(MakeReservationEvent event) {
+	void on(BorrowEvent event) {
 		//TODO
 	}	
 	
 	@EventSourcingHandler
-	void on(CancelReservationEvent event) {
+	void on(ReturnEvent event) {
 		//TODO
 	}			
 		

@@ -1,7 +1,7 @@
 package mobi.qubits.ex.library;
 
+import mobi.qubits.ex.library.domain.Book;
 import mobi.qubits.ex.library.domain.BookCommandGateway;
-import mobi.qubits.ex.library.domain.book.Book;
 
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler;
 import org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean;
